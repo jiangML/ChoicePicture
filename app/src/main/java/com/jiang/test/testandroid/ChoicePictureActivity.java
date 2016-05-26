@@ -11,10 +11,14 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/5/26.
@@ -26,6 +30,9 @@ public class ChoicePictureActivity extends AppCompatActivity {
     private RecycleFolderAdapter adapter;
     private RecyclerView rl;
     private List<String>  allImage=new ArrayList<>();
+    private Map<String,View> map=new HashMap<>();
+    private TextView tv_ok;
+
 
 
     private Handler handler=new Handler(){
@@ -54,6 +61,7 @@ public class ChoicePictureActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.choice_picture_activity);
         rl=(RecyclerView)findViewById(R.id.rl);
+        tv_ok=(TextView)findViewById(R.id.tv_ok);
         startGetImage();
     }
 
@@ -64,7 +72,6 @@ public class ChoicePictureActivity extends AppCompatActivity {
      */
     private void  getImages()
     {
-
         Uri imageUri= MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         ContentResolver resolver=this.getContentResolver();
         Cursor cursor=resolver.query(imageUri,null,
@@ -107,8 +114,24 @@ public class ChoicePictureActivity extends AppCompatActivity {
       GridLayoutManager gridLayoutManager=new GridLayoutManager(this,3);
       rl.setLayoutManager(gridLayoutManager);
       adapter=new RecycleFolderAdapter(allImage,this);
+      adapter.setListener(new RecycleFolderAdapter.OnItemTouchListener() {
+          @Override
+          public void onItemTouch(View view, int position,String uri) {
+              if(!map.containsKey(uri))
+              {
+                  view.setAlpha(0.3f);
+                  map.put(uri,view);
+              }else{
+                  view.setAlpha(1f);
+                  map.remove(uri);
+              }
+              tv_ok.setText("完成("+map.size()+")");
+          }
+      });
       rl.setAdapter(adapter);
   }
+
+
 
 
 }

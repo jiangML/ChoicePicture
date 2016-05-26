@@ -20,6 +20,10 @@ public class RecycleFolderAdapter extends RecyclerView.Adapter<RecyclerView.View
     private LayoutInflater inflater;
     List<String> data=new ArrayList<>();
 
+    public interface OnItemTouchListener{
+        void onItemTouch(View view,int position,String uri);
+    }
+    private OnItemTouchListener listener;
 
     public RecycleFolderAdapter(List<String> data,Context context)
     {
@@ -41,7 +45,15 @@ public class RecycleFolderAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+
+            ((FolderHolder)holder).itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener!=null)
+                        listener.onItemTouch(v,position,data.get(position));
+                }
+            });
             Glide.with(context).load(data.get(position)).into(((FolderHolder) holder).iv);
     }
 
@@ -59,5 +71,9 @@ public class RecycleFolderAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
+   public void setListener(OnItemTouchListener listener)
+   {
+       this.listener=listener;
+   }
 
 }
