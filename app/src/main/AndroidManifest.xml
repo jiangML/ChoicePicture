@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ChoicePictureActivity"/>
+        <activity android:name=".ChoicePictureActivity"
+                  android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 

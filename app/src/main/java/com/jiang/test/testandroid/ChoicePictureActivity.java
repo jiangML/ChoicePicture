@@ -5,8 +5,10 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StatFs;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,7 +16,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +36,7 @@ public class ChoicePictureActivity extends AppCompatActivity {
     private List<String>  allImage=new ArrayList<>();
     private Map<String,View> map=new HashMap<>();
     private TextView tv_ok;
-
+    private TextView tv_back;
 
 
     private Handler handler=new Handler(){
@@ -62,6 +66,15 @@ public class ChoicePictureActivity extends AppCompatActivity {
         setContentView(R.layout.choice_picture_activity);
         rl=(RecyclerView)findViewById(R.id.rl);
         tv_ok=(TextView)findViewById(R.id.tv_ok);
+        tv_back=(TextView)findViewById(R.id.tv_back);
+        tv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(dialog!=null)
+                    dialog.dismiss();
+                finish();
+            }
+        });
         startGetImage();
     }
 
@@ -91,6 +104,12 @@ public class ChoicePictureActivity extends AppCompatActivity {
      */
    public void startGetImage()
    {
+       if(!existSDCard())
+       {
+           Toast.makeText(this,"不存在SD卡！",Toast.LENGTH_SHORT).show();
+           return ;
+       }
+
        if(dialog==null)
        {
            dialog=ProgressDialog.show(this,null,"正在扫描...");
@@ -121,7 +140,7 @@ public class ChoicePictureActivity extends AppCompatActivity {
               {
                   view.setAlpha(0.3f);
                   map.put(uri,view);
-              }else{
+              }else {
                   view.setAlpha(1f);
                   map.remove(uri);
               }
@@ -131,6 +150,32 @@ public class ChoicePictureActivity extends AppCompatActivity {
       rl.setAdapter(adapter);
   }
 
+    /**
+     * 判断是否存在SD卡
+     * @return true 存在、false 不存在
+     */
+  private  boolean existSDCard()
+  {
+      if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
+      {
+          return true;
+      }else{
+          return false;
+      }
+  }
+
+    /**
+     * 获取SD卡剩余空间大小
+      * @return MB
+     */
+  private long getSDCardFreeSize()
+  {
+      File file=Environment.getExternalStorageDirectory();
+      StatFs fs=new StatFs(file.getPath());
+      long blockSize=fs.getBlockSizeLong();
+      long freeBlockSize=fs.getAvailableBlocksLong();
+      return blockSize*freeBlockSize/1024/1024;// MB
+  }
 
 
 

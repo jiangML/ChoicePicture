@@ -15,8 +15,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="back"
-           />
+            android:paddingLeft="5dp"
+            android:textSize="18sp"
+            android:text="Back" />
 
         <TextView
             android:id="@+id/tv_ok"
@@ -35,7 +36,6 @@
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </android.support.v7.widget.RecyclerView>
 
 
