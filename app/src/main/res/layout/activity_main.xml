@@ -17,7 +17,16 @@
         android:textSize="20sp"
         android:background="@drawable/button_bg"
         android:text="选择相片"/>
-
+    <Button
+        android:id="@+id/btn1"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="20sp"
+        android:background="@drawable/button_bg"
+        android:text="btn"/>
 
 
 </LinearLayout>

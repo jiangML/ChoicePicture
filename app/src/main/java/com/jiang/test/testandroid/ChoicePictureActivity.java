@@ -32,11 +32,11 @@ public class ChoicePictureActivity extends AppCompatActivity {
     private ProgressDialog dialog;
     private static final  int SCAN_OK=1;
     private RecycleFolderAdapter adapter;
-    private RecyclerView rl;
     private List<String>  allImage=new ArrayList<>();
     private Map<String,View> map=new HashMap<>();
     private TextView tv_ok;
     private TextView tv_back;
+    private RecyclerView rl;
 
 
     private Handler handler=new Handler(){
@@ -55,8 +55,6 @@ public class ChoicePictureActivity extends AppCompatActivity {
                 dialog.dismiss();
         }
     };
-
-
 
 
     @Override
