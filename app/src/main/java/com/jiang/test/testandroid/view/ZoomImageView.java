@@ -35,6 +35,21 @@ public class ZoomImageView extends ImageView  implements ScaleGestureDetector.On
     //检测双击事件
     private GestureDetector gestureDetector;
 
+    //可以左右移动
+    private boolean canLeftRight=true;
+
+    //可以上下移动
+    private boolean canTopBottom=true;
+
+    //上次触摸点数量
+    private int lastPointerCount=0;
+
+    //上次触摸点横坐标
+    private float lastX=0;
+
+    //上次触摸点纵坐标
+    private float lastY=0;
+
     public ZoomImageView(Context context) {
         super(context);
         init();
@@ -60,7 +75,6 @@ public class ZoomImageView extends ImageView  implements ScaleGestureDetector.On
         gestureDetector=new GestureDetector(getContext(),new GestureDetector.SimpleOnGestureListener(){
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                System.out.println("双击.....");
                 if(isAutoScalIng)
                 {
                     return true;
@@ -85,7 +99,6 @@ public class ZoomImageView extends ImageView  implements ScaleGestureDetector.On
 
     }
 
-
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
 
@@ -109,7 +122,6 @@ public class ZoomImageView extends ImageView  implements ScaleGestureDetector.On
              checkScale();
              setImageMatrix(matrix);
          }
-
         return true;
     }
 
@@ -123,12 +135,6 @@ public class ZoomImageView extends ImageView  implements ScaleGestureDetector.On
 
     }
 
-
-    private boolean canLeftRight=true;
-    private boolean canTopBottom=true;
-    private int lastPointerCount=0;
-    private float lastX=0;
-    private float lastY=0;
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         mScaleGestureDetector.onTouchEvent(event);
@@ -324,14 +330,6 @@ public class ZoomImageView extends ImageView  implements ScaleGestureDetector.On
            {
                offsetX=width-rectf.right;
            }
-//            if(rectf.left<0)
-//            {
-//                offsetX=Math.abs(rectf.left)-(rectf.width()-width)*1.0f/2;
-//            }
-//            if(rectf.left>=0)
-//            {
-//                offsetX=-(rectf.left+(rectf.width()-width)*1.0f/2);
-//            }
         }
 
         if (rectf.height() >= height) {
@@ -343,15 +341,6 @@ public class ZoomImageView extends ImageView  implements ScaleGestureDetector.On
             {
                 offsetY=height-rectf.bottom;
             }
-
-//            if(rectf.top>=0)
-//            {
-//                offsetY=-(rectf.top+(rectf.height()-height)*1.0f/2);
-//            }
-//            if(rectf.top<0)
-//            {
-//                offsetY=Math.abs(rectf.top)-(rectf.height()-height)*1.0f/2;
-//            }
         }
 
         if (rectf.width() < width)
@@ -379,6 +368,9 @@ public class ZoomImageView extends ImageView  implements ScaleGestureDetector.On
         getViewTreeObserver().removeGlobalOnLayoutListener(this);
     }
 
+    /**
+     * 在双击时缩放图片时的动画处理类
+     */
     private class AutoScaleRunnable implements Runnable{
 
         private float targetScale;
@@ -416,9 +408,6 @@ public class ZoomImageView extends ImageView  implements ScaleGestureDetector.On
            }
         }
     }
-
-
-
 
 
 }
